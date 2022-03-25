@@ -1,0 +1,174 @@
+{% extends 'base.html' %}
+
+{% block head %}
+
+{% endblock %}
+
+
+
+{% block body %}
+
+<!-- Header-->
+        <header class="py-4">
+            <div class="container px-lg-5">
+                <div class="p-4 p-lg-1 bg-light rounded-3 text-center">
+                    <div class="m-4 m-lg-5">
+                        <h1 class="display-5 fw-bold">Team Management</h1>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <!-- About section-->
+        <section id="about">
+            <div class="container px-4">
+                <div class="row gx-4 justify-content-center">
+                    <div class="col-lg-10">
+
+                        {% with messages = get_flashed_messages() %}
+                            {% if messages %}
+
+                                {% for message in messages %}
+                                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                        {{ message }}
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+                        {% endwith %}
+
+                        <br>
+
+                        <h1>Teams
+                            <button type="button" class="btn btn-success btn-lg btn-block" data-bs-toggle="modal" data-bs-target="#add_team">Add Team</button>
+                        </h1>
+
+                        <br>
+
+                        <div class="modal fade" id="add_team" aria-labelledby="add_typeLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="add_modalLabel">Add Team</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <form action="{{ url_for('teams') }}" method="POST" novalidate>
+                                                <div class="modal-body">
+                                                    {{ form.hidden_tag() }}
+                                                <p>
+                                                    {{ form.team_name.label }}:<br>
+                                                    {{ form.team_name }}
+                                                </p>
+                                                <p>
+                                                    {{ form.team_mascot.label }}:<br>
+                                                    {{ form.team_mascot }}
+                                                </p>
+                                                <p>{{ form.submit() }}</p>
+                                                </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                        </div>
+
+                        <table class="table">
+                            <thead>
+                                <th scope="col">Team Name</th>
+                                <th scope="col">Team Mascot</th>
+                            </thead>
+                            {% for team in teams %}
+                            <tr>
+                                <td align="left">{{ team.team_name }}</td>
+                                <td align="left">{{ team.team_mascot }}</td>
+                                <td align="left">
+                                    <button type="button" class="btn btn-success btn-block" data-bs-toggle="modal" data-bs-target="#update_modal{{team.team_id}}">Update</button>
+                                    <div class="modal fade" id="update_modal{{team.team_id}}" aria-labelledby="update_modalLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="update_modalLabel">Update Team</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <form action="{{url_for('team_update', team_id=team.team_id)}}" method="POST" novalidate>
+                                                <div class="modal-body">
+
+                                                    <p>
+                                                    <label for="team_name">Team Name:</label><br>
+                                                    <input type="text" id="team_name" name="team_name" value="{{ team.team_name }}">
+                                                    </p>
+                                                    <p>
+                                                    <label for="team_mascot">Team Mascot:</label><br>
+                                                    <input type="text" id="team_mascot" name="team_mascot" value="{{ team.team_mascot }}">
+                                                    </p>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <input type="submit" class="btn btn-success" value="Submit">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete_modal{{team.team_id}}">Delete</button>
+                                    <div class="modal fade" id="delete_modal{{team.team_id}}" aria-labelledby="delete_modalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="delete_modalLabel">Delete Team</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p>Are you sure you want to delete {{ team.team_name }}? This can't be undone.
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                <form action="{{url_for('team_delete', team_id=team.team_id)}}" method="POST">
+                                                    <input type="submit" class="btn btn-primary" value="Delete">
+                                                </form>
+                                          </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                </td>
+
+                            </tr>
+                            {% endfor %}
+
+                        </table>
+
+
+
+
+
+
+
+
+
+
+                        </form>
+
+
+                        <br>
+
+
+                        <br>
+                        <br>
+                        <br>
+
+                        <br>
+
+
+                        <br>
+                        <br>
+                        <br>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+{% endblock %}

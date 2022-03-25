@@ -1,0 +1,189 @@
+{% extends 'base.html' %}
+
+{% block head %}
+
+{% endblock %}
+
+
+
+{% block body %}
+
+<!-- Header-->
+        <header class="py-4">
+            <div class="container px-lg-5">
+                <div class="p-4 p-lg-1 bg-light rounded-3 text-center">
+                    <div class="m-4 m-lg-5">
+                        <h1 class="display-5 fw-bold">Practice Management</h1>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <!-- About section-->
+        <section id="about">
+            <div class="container px-4">
+                <div class="row gx-4 justify-content-center">
+                    <div class="col-lg-10">
+
+                        {% with messages = get_flashed_messages() %}
+                            {% if messages %}
+
+                                {% for message in messages %}
+                                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                        {{ message }}
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+                        {% endwith %}
+
+                        <br>
+
+                        <h1>Practices
+                            <button type="button" class="btn btn-success btn-lg btn-block" data-bs-toggle="modal" data-bs-target="#add_practice">Add Practice</button>
+                        </h1>
+
+                        <br>
+
+                        <div class="modal fade" id="add_practice" aria-labelledby="add_typeLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="add_modalLabel">Add Practice</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <form action="{{ url_for('practices') }}" method="POST" novalidate>
+                                                <div class="modal-body">
+                                                    {{ form.hidden_tag() }}
+                                                <p>
+                                                    {{ form.practice_date.label }}:<br>
+                                                    {{ form.practice_date(class='datepicker') }}
+                                                </p>
+                                                <p>
+                                                    {{ form.practice_length.label }}:<br>
+                                                    {{ form.practice_length }}
+                                                </p>
+                                                <p>
+                                                    {{ form.teams.label }}:<br>
+                                                    {{ form.teams }}
+                                                </p>
+                                                <p>{{ form.submit() }}</p>
+                                                </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                        </div>
+
+                        <table class="table">
+                            <thead>
+                                <th scope="col">Team Name</th>
+                                <th scope="col">Practice Date</th>
+                                <th scope="col">Practice Length</th>
+                            </thead>
+                            {% for practice in practices %}
+                            <tr>
+                                <td align="left">{{ practice.team_name }}</td>
+                                <td align="left">{{ practice.practice_date }}</td>
+                                <td align="left">{{ practice.practice_length }}</td>
+                                <td align="left">
+                                    <button type="button" class="btn btn-success btn-block" data-bs-toggle="modal" data-bs-target="#update_modal{{practice.practice_id}}">Update</button>
+                                    <div class="modal fade" id="update_modal{{practice.practice_id}}" aria-labelledby="update_modalLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="update_modalLabel">Update Practice</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <form action="{{url_for('practice_update', practice_id=practice.practice_id)}}" method="POST" novalidate>
+                                                <div class="modal-body">
+
+                                                    <p>
+                                                    <label for="practice_date">Practice Date:</label><br>
+                                                    <input type="date" id="practice_date" name="practice_date" value="{{ practice.practice_date }}">
+                                                    </p>
+                                                    <p>
+                                                    <label for="practice_length">Practice Length:</label><br>
+                                                    <input type="text" id="practice_length" name="practice_length" value="{{ practice.practice_length }}">
+                                                    </p>
+                                                    <p>
+                                                    <label for="teams">Teams:</label><br>
+                                                    <select id="teams" name="teams">
+                                                        <option value="{{practice.team_id}}" selected>{{ practice.team_name }}</option>
+                                                        {% for team in teams %}
+                                                        <option value="{{team.team_id}}">{{ team.team_name }}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                    </p>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <input type="submit" class="btn btn-success" value="Submit">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete_modal{{practice.practice_id}}">Delete</button>
+                                    <div class="modal fade" id="delete_modal{{practice.practice_id}}" aria-labelledby="delete_modalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="delete_modalLabel">Delete Practice</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p>Are you sure you want to delete this practice? This can't be undone.
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                <form action="{{url_for('practice_delete', practice_id=practice.practice_id)}}" method="POST">
+                                                    <input type="submit" class="btn btn-primary" value="Delete">
+                                                </form>
+                                          </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                </td>
+
+                            </tr>
+                            {% endfor %}
+
+                        </table>
+
+
+
+
+
+
+
+
+
+
+                        </form>
+
+
+                        <br>
+
+
+                        <br>
+                        <br>
+                        <br>
+
+                        <br>
+
+
+                        <br>
+                        <br>
+                        <br>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+{% endblock %}
