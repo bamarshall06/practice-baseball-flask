@@ -6,7 +6,9 @@ from config import Config
 
 app = Flask(__name__)
 app.config.from_object(Config)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://admin:pepsi2222@baseball.cqyhggbcdmue.us-east-1.rds.amazonaws.com/sys'
+
+#database configuration
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://username:password@aws_server_host/database'
 
 # create the database
 db = SQLAlchemy(app)
