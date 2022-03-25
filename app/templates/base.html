@@ -27,8 +27,8 @@
 
                         {% if current_user.is_anonymous %}
 
-                        <li class="nav-item"><a class="nav-link {% block nav_home %}{% endblock %}" href="{{ url_for('index') }}">Home</a></li>
-                        <li class="nav-item"><a class="nav-link {% block nav_login %}{% endblock %}" href="#">Login</a></li>
+                        <li class="nav-item"><a class="nav-link {% block nav_home_not_log %}{% endblock %}" href="{{ url_for('index') }}">Home</a></li>
+                        <li class="nav-item"><a class="nav-link {% block nav_login %}{% endblock %}" href="{{ url_for('login') }}">Login</a></li>
 
                         {% else %}
                         <li class="nav-item"><a class="nav-link {% block nav_home %}{% endblock %}" href="{{ url_for('index') }}">Home</a></li>
