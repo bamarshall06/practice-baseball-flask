@@ -3,10 +3,10 @@ import pymysql
 ### DB CONNECTION
 
 def connect():
-    connection = pymysql.connect(host='baseball.cqyhggbcdmue.us-east-1.rds.amazonaws.com',
+    connection = pymysql.connect(host='this.is.you.aws.server.host.com',
                                  port=3306,
                                  database='sys',
                                  user='admin',
-                                 password='pepsi2222',
+                                 password='putyourpasswrodhere',
                                  cursorclass=pymysql.cursors.DictCursor)
     return connection
